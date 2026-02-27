@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const app = express();
 
-const CREDENTIALS_PATH = path.join(process.cwd(), 'c2.json');
+//const CREDENTIALS_PATH = path.join(process.cwd(), 'c2.json');
 // const CREDENTIALS_PATH = path.join(process.cwd(), 'private-credentials.json');
 const credentials = JSON.parse(
   Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, "base64").toString("utf-8")
