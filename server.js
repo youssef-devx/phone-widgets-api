@@ -1,20 +1,13 @@
 const express = require("express");
-const path = require("path")
 const { google } = require("googleapis");
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 const app = express();
-
-//const CREDENTIALS_PATH = path.join(process.cwd(), 'c2.json');
-// const CREDENTIALS_PATH = path.join(process.cwd(), 'private-credentials.json');
 const credentials = JSON.parse(
   Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, "base64").toString("utf-8")
 );
 const auth = new google.auth.GoogleAuth({
-  keyFile: CREDENTIALS_PATH,
-  credentials: {
-    ...require(CREDENTIALS_PATH),
-  },
+  credentials,
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
 const sheets = google.sheets({ version: "v4", auth });
