@@ -5,18 +5,18 @@ require("dotenv").config();
 
 const app = express();
 
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
+const CREDENTIALS_PATH = path.join(process.cwd(), 'c2.json');
+// const CREDENTIALS_PATH = path.join(process.cwd(), 'private-credentials.json');
+const credentials = JSON.parse(
+  Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, "base64").toString("utf-8")
+);
 const auth = new google.auth.GoogleAuth({
   keyFile: CREDENTIALS_PATH,
   credentials: {
     ...require(CREDENTIALS_PATH),
-    private_key_id: process.env.PRIVATE_KEY_ID,
-    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-    client_email: process.env.CLIENT_EMAIL,
   },
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
-
 const sheets = google.sheets({ version: "v4", auth });
 
 app.get("/budget-spreadsheet", async (req, res) => {
@@ -28,6 +28,7 @@ app.get("/budget-spreadsheet", async (req, res) => {
     const rows = response.data.values;
 
     if (!rows || rows.length === 0) {
+      console.log(404, "No data found.");
       res.status(404).json({
         savings: 5,
         emergency: 5,
@@ -46,6 +47,7 @@ app.get("/budget-spreadsheet", async (req, res) => {
 
     res.json(values);
   } catch (err) {
+    console.log("Error message: ", err.message);
     res.status(500).json({
       savings: 8,
       emergency: 8,

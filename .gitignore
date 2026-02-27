@@ -1,3 +1,8 @@
 node_modules
 .env
 private-credentials.json
+./private-credentials.json
+./c2.json
+c2.json
+./credentials.json
+credentials.json
