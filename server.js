@@ -8,7 +8,12 @@ const app = express();
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 const auth = new google.auth.GoogleAuth({
   keyFile: CREDENTIALS_PATH,
-  credentials: require(CREDENTIALS_PATH),
+  credentials: {
+    ...require(CREDENTIALS_PATH),
+    private_key_id: process.env.PRIVATE_KEY_ID,
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.CLIENT_EMAIL,
+  },
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
 
